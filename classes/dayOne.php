@@ -8,7 +8,8 @@
             $this->inputTxt = $inputTxt;
         }
 
-        public function getInput() {
+        // This function can be accessed within this class and any classes derived from it. 
+        protected function getInput() {
             $contents = file_get_contents($this->inputTxt);
             $input = preg_split('/\r\n|\r|\n/', $contents);
             return $input;
@@ -23,6 +24,7 @@
             $this->total = $total;
         }
 
+        // These functions can be used anywhere.
         public function getPart1() {
             $total = $this->total;
             $input = $this->getInput();
@@ -31,7 +33,7 @@
             foreach ($input as $line) {
                 // Get digits in numeric and word form.
                 $numbers = $this->calculateTotal($total, '/\d/', $line, $part);
-                
+
                 $totalValue = $numbers[0] . $numbers[1];
                 $total += intval($totalValue); // Convert to integer.
             }
@@ -53,7 +55,8 @@
             return $total;
         }
 
-        public function calculateTotal($total, $pattern, $line, $part) {
+        // This function can be used only within this class.
+        private function calculateTotal($total, $pattern, $line, $part) {
             $lettersNumbers = [
                 'one' => 1,
                 'two' => 2,
@@ -66,14 +69,20 @@
                 'nine' => 9,
             ];
             preg_match_all($pattern, $line, $matches);
-    
-            if($part === "part1"){
-                $firstNumber = $matches[0][0];
-                $lastNumber  = end($matches[0]);
-            } else {
-                $firstNumber = $lettersNumbers[$matches[1][0]] ?? $matches[1][0];
-                $lastNumber  = $lettersNumbers[end($matches[1])] ?? end($matches[1]);
+            $firstNumber = "";
+            $lastNumber = "";
+
+            // Check if there is any matches within line.
+            if(isset($matches[0][0])){
+                if($part === "part1"){
+                    $firstNumber = $matches[0][0];
+                    $lastNumber  = end($matches[0]);
+                } else {
+                    $firstNumber = $lettersNumbers[$matches[1][0]] ?? $matches[1][0];
+                    $lastNumber  = $lettersNumbers[end($matches[1])] ?? end($matches[1]);
+                }
             }
+
             return [$firstNumber, $lastNumber];
         }
     }
