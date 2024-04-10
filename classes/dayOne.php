@@ -24,15 +24,15 @@
             $this->total = $total;
         }
 
-        // These functions can be used anywhere.
+        // These public functions can be used anywhere.
         public function getPart1() {
             $total = $this->total;
             $input = $this->getInput();
             $part = "part1";
 
             foreach ($input as $line) {
-                // Get digits in numeric and word form.
-                $numbers = $this->calculateTotal($total, '/\d/', $line, $part);
+                // Get digits in numeric form.
+                $numbers = $this->calculateTotal('/\d/', $line, $part);
 
                 $totalValue = $numbers[0] . $numbers[1];
                 $total += intval($totalValue); // Convert to integer.
@@ -47,16 +47,16 @@
 
             foreach ($input as $line) {
                 // Get digits in numeric and word form.
-                $numbers = $this->calculateTotal($total, '/(?=(\d|one|two|three|four|five|six|seven|eight|nine))/', $line, $part);
+                $numbers = $this->calculateTotal('/(?=(\d|one|two|three|four|five|six|seven|eight|nine))/', $line, $part);
 
-                $totalValue = strval($numbers[0]) . strval($numbers[1]); // Concatenate 2 digits as string.
+                $totalValue = strval($numbers[0]) . strval($numbers[1]); // Concatenate 2 integers as string.
                 $total += intval($totalValue); // Convert to integer.
             }
             return $total;
         }
 
         // This function can be used only within this class.
-        private function calculateTotal($total, $pattern, $line, $part) {
+        private function calculateTotal($pattern, $line, $part) {
             $lettersNumbers = [
                 'one' => 1,
                 'two' => 2,
